@@ -36,7 +36,7 @@ app.layout = dbc.Container(
     [Input('change','n_clicks')]
 )
 def change_content(n):
-    if n%0:
+    if n%2:
         name = 'Russell'
         case = 'lower'
     else:
