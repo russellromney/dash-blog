@@ -6,6 +6,15 @@ from dash.dependencies import Input, Output, State
 from dash import no_update
 
 
+from settings import (
+    config_name,
+    config_description,
+    config_homepage,
+    config_github,
+    config_linkedin,
+    server_secret_key
+)
+
 app = dash.Dash(
     __name__,
     external_stylesheets=[
@@ -18,7 +27,7 @@ app.title = 'Russell Romney'
 app.config['suppress_callback_exceptions'] = True
 
 server = app.server
-server.secret_key = '^&=mgQ2Ph-Wuq.}U_;HB"_*hw2caxPc7MzXYErh3>s{m!LXgpw9876IJH76b,HJF^&=mgQ2Ph-Wuq.}U_;HB"_*hw2caxPc7MzXYErh3>s{m!LXgpw9876IJH76b,HJF'
+server.secret_key = server_secret_key
 
 app.layout =  html.Div(
     [
@@ -35,12 +44,13 @@ app.layout =  html.Div(
                         align='center',
                         no_gutters=True
                     ),
-                    href='http://www.russellromney.me/'
+                    href=config_homepage
                 )
             ],
             color='light',
         ), # end navbar
         
+        # TODO
         # location manager
         dcc.Location(id='url'),
         
@@ -48,6 +58,10 @@ app.layout =  html.Div(
         dbc.Container(
             dbc.Row(
                 [
+                    # TODO
+                    # store for cookies
+                    dcc.Store(id='browser-store'),
+                    
                     # content engine
                     dbc.Col(
                         [
@@ -61,7 +75,13 @@ app.layout =  html.Div(
                                     html.Hr(className='my-2'),
                                     html.A(dbc.Button('About Me',color='primary'),href='/about')
                                 ]
-                            )
+                            ),
+                            
+                            # TODO
+                            # recommended articles
+
+                            # TODO
+                            # comments (commento)
                         ],
                         width=8
                     ), # end content engine
@@ -75,9 +95,11 @@ app.layout =  html.Div(
                                         dbc.CardImg(src='assets/him.png',top=True),
                                         dbc.CardBody(
                                             [
-                                                html.H4('Russell Romney',className='card-title'),
+                                                # name
+                                                html.H4(config_name,className='card-title'),
+                                                # description
                                                 html.P(
-                                                    "Developer, data scientist, reader, mountain biker.",
+                                                    config_description,
                                                     className='card-text'
                                                 ),
                                             ]
@@ -87,6 +109,7 @@ app.layout =  html.Div(
 
                                 html.Br(),
 
+                                # TODO
                                 # social
                                 dbc.Card(
                                     [
@@ -95,13 +118,13 @@ app.layout =  html.Div(
                                                 html.H4('Connect',className='card-title'),
                                                 html.A(
                                                     'GitHub',
-                                                    href='https://github.com/russellromney',
+                                                    href=config_github,
                                                     className='card-link',
                                                     target='_blank'
                                                 ),
                                                 html.A(
                                                     'LinkedIn',
-                                                    href='https://linkedin.com/in/russellromney',
+                                                    href=config_linkedin,
                                                     className='card-link',
                                                     target='_blank'
                                                 ),
@@ -113,6 +136,7 @@ app.layout =  html.Div(
 
                                 html.Br(),
 
+                                # TODO
                                 # posts card
                                 dbc.Card(
                                     dbc.CardLink(
@@ -136,18 +160,3 @@ app.layout =  html.Div(
     ],
     style=dict(width='100%')
 )
-
-@app.callback(
-    [Output('content','children'),
-     Output('change','children')],
-    [Input('change','n_clicks')]
-)
-def change_content(n):
-    if n%2:
-        name = 'Russell'
-        case = 'lower'
-    else:
-        name = 'RUSSELL'
-        case = 'lower'
-    return 'This is the blog of '+name, 'Change name to {}case'.format(case)
-
