@@ -12,3 +12,8 @@ config_linkedin = 'https://linkedin.com/in/russellromney'
 server_secret_key = '^&=mgQ2Ph-Wuq.}U_;HB"_*hw2caxPc7MzXYErh3>s{m!LXgpw9876IJH76b,HJF^&=mgQ2Ph-Wuq.}U_;HB"_*hw2caxPc7MzXYErh3>s{m!LXgpw9876IJH76b,HJF'
 
 
+
+# visual config
+# color - one of green, blue, teal, grey, yellow, red, white, black
+theme_color = 'blue'
+

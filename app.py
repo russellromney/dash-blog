@@ -9,10 +9,23 @@ from dash import no_update
 from settings import (
     config_name,
     config_description,
-    config_homepage,
     config_github,
     config_linkedin,
-    server_secret_key
+    server_secret_key,
+    theme_color
+)
+
+from elements import (
+    blog_title,
+    main_content,
+    next_previous_post,
+    recommended_articles,
+    blog_navbar
+)
+
+from posts import (
+    home,
+    post_template
 )
 
 app = dash.Dash(
@@ -21,7 +34,6 @@ app = dash.Dash(
         dbc.themes.BOOTSTRAP
     ]
 )
-
 
 app.title = 'Russell Romney'
 app.config['suppress_callback_exceptions'] = True
@@ -32,56 +44,53 @@ server.secret_key = server_secret_key
 app.layout =  html.Div(
     [
         # navbar
-        dbc.Navbar(
-            [
-                # logo and name
-                html.A(
-                    dbc.Row(
-                        [
-                            dbc.Col(html.Img(src='/assets/logo-small.png',height='50px')),
-                            #dbc.Col(dbc.NavbarBrand('Russell Romney',className='ml-2'))
-                        ],
-                        align='center',
-                        no_gutters=True
-                    ),
-                    href=config_homepage
-                )
-            ],
-            color='light',
-        ), # end navbar
-        
+        blog_navbar,
+
         # TODO
         # location manager
         dcc.Location(id='url'),
-        
+
+        # TODO
+        # store for cookies
+        dcc.Store(id='browser-store'),
+
         # body
         dbc.Container(
             dbc.Row(
-                [
-                    # TODO
-                    # store for cookies
-                    dcc.Store(id='browser-store'),
-                    
+                [                    
                     # content engine
                     dbc.Col(
                         [
-                            dbc.Jumbotron(
-                                [
-                                    html.H1('The website of Russell Romney',className='display-3'),
-                                    html.P(
-                                        "Ruminations, etc.",
-                                        className='lead'
-                                    ),
-                                    html.Hr(className='my-2'),
-                                    html.A(dbc.Button('About Me',color='primary'),href='/about')
-                                ]
-                            ),
-                            
+                            # title div
+                            blog_title,
+
+                            html.Br(),
+
+                            # TODO
+                            # main content
+                            main_content,
+
+                            html.Br(),
+
+                            # TODO
+                            # previous and next posts
+                            next_previous_post,
+
+                            html.Br(),
+
                             # TODO
                             # recommended articles
+                            recommended_articles,
+
+                            html.Br(),
 
                             # TODO
                             # comments (commento)
+                            dbc.Row(dbc.Col(
+                                dbc.Card('comments')
+                            )),
+
+                            html.Br(),
                         ],
                         width=8
                     ), # end content engine
@@ -154,9 +163,22 @@ app.layout =  html.Div(
                             ],
                         width=3
                     ), # end sidebar
-                ]
-            )
+                ],
+            ),
+            fluid=True
         ), # end body
+
     ],
-    style=dict(width='100%')
+    style=dict(width='100%'),
 )
+
+
+
+@app.callback(
+    Output('main-content','children'),
+    [Input('url','pathname')]
+)
+def router(url):
+    if url=='/post-template':
+        return post_template.content
+    return home.content
